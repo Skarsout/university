@@ -1,0 +1,180 @@
+html {
+	font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+
+
+body{
+	background-color: rgb(27,40,56);
+	max-width:1028px;
+	margin:auto;
+
+}
+
+/*HEADER*/
+header{
+	display: flex;
+	width: 100%;
+	align-items: center;
+}
+.logo{
+	display:block;
+	width: 250px;
+	margin-right: 10px;
+}
+
+.search-bar{
+	width:auto;
+	margin: 5px;
+}
+.search-button{
+}
+.adv_search{
+	margin: 20px;
+}
+.logout{
+	margin-left:30px;
+}
+
+/*CONTAINER*/
+#container{
+	border-top-style: solid;
+	border-color: grey;
+	border-bottom-style: solid;
+	border-width: 2px;
+
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	display: flex;
+	width: 100%;
+}
+
+#categorias{
+	border-right-style: solid;
+	border-color: grey;
+	border-width: 2px;
+
+	text-align: center;
+	left: 0;
+	width: 205px;
+	min-width: 205px;
+}
+
+#categorias input{
+	border: none;
+	background: none;
+	cursor: pointer;
+
+	font-size: 20px;
+	color: black;
+}
+
+/*CONTENT*/
+.content{
+	width: 100%;
+}
+
+#home{
+	text-align: center;
+}
+#advanced-search{
+	padding: 20px;
+}
+
+#produtos-list{
+	display: grid;
+	grid-template-rows: repeat(5 1fr);
+
+	border-left-style: solid;
+	boder-color: grey;
+	border-width: 2px;
+}
+#carrinho-content{
+	padding: 20px;
+}
+.carrinho-desc{
+	font-size: 30px;
+}
+.item {
+	border-bottom-style: solid;
+	border-color: grey;
+	border-bottom-width: 1px;
+
+	border-top-style: solid;
+	border-color: grey;
+	border-top-width: 1px;
+
+	padding-right: 20px;
+}
+
+.img_list{
+	float: left;
+	margin: 20px;
+	width: 227px;
+	height: 300px;
+}
+
+.desc {
+	margin-left: 10px;
+}
+
+.titulo {
+	border: none;
+	background: none;
+	cursor: pointer;
+	margin-top: 10px;
+	padding: 0;
+
+	font-size: 30px;
+	color: black;
+}
+
+.description{
+	font-size: 100%;
+}
+
+.preco{
+	font-size: 50px;
+	text-align: right;
+}
+
+.cart{
+	bottom: 0;
+}
+.img-checkout{
+	width: 25px;
+	height: 25px;
+}
+
+
+/*FOOTER*/
+footer{
+	bottom: 0;
+	width: auto;
+
+}
+
+/*RESPONSIVIDADE*/
+@media screend and (max-width : 690px){
+	.img_list{
+		max-width: 180px;
+	}
+}
+@media screend and (max-width : 600px){
+	.img_list{
+		max-width: 124px;
+	}
+}
+@media screend and (max-width : 749px){
+	#categorias{
+		left: unset;
+		bottom: 0;
+		width: auto;
+	}
+	.content{
+		width:auto;
+	}
+	body{
+		width:100%
+	}
+}

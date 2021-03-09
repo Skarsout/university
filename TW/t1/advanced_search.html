@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Pesquisa Avançada</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+
+	<body>
+		<header>
+			<a href="index.html">
+				<img src="logo.svg" alt="logo">
+			</a>
+
+			<input id="search" type="text" placeholder="Search..."/>
+			<button type="submit"></button>
+			<form action="advanced_search.html">
+    			<input id="adv_search" type="submit" value="Advanced search" class="advfont"/>
+			</form>
+		</header>
+
+		<div id="categorias">
+			<h2>Categorias:</h1>
+			<a href="#">Singleplayer</a>
+			<a href="#">Multiplayer</a>
+			<a href="#">Ação</a>
+			<a href="#">Aventura</a>
+			<a href="#">RPG</a>
+			<a href="#">Estratégia</a>
+			<a href="#">Simulador</a>
+		</div>
+
+		<div id="advanced_search">
+			<form action="http://localhost:8080/search.html" method="POST">
+				<label>Descrição do produto:</label><br>
+				<input type="text" name="descricao"><br>
+
+				<label>Categoria do produto:</label>
+				<select name="categorias">
+					<option value="singleplayer">Singleplayer</option>
+					<option value="multiplayer">Multiplayer</option>
+					<option value="action">Ação</option>
+					<option value="adventure">Aventura</option>
+					<option value="rpg">RPG</option>
+					<option value="strategy">Estratégia</option>
+					<option value="simulator">Simulador</option>
+				</select><br>
+
+				<label>Intervalo de preço:</label><br>
+				<label>Min:</label>
+				<input type="text" name="price_min">
+				<label>Max:</label>
+				<input type="text" name="price_max"><br>
+
+				<label>Data de lançamento na loja:</label><br>
+				<input type="date" name="dataLancamento"><br>
+
+				<label>Data em que o produto deixa de estar disponível para venda:</label><br>
+				<input type="date" name="dataDescontinuado"><br><br>
+
+				<input type="submit" value="Pesquisa Avançada">
+			</form>
+		</div>
+
+		<footer>
+			<a href="#">About this page</a>
+		</footer>
+	</body>
+</html>

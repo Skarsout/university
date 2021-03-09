@@ -1,0 +1,194 @@
+--4.
+--a)
+SELECT DISTINCT autor.Nome
+FROM autor, autoria, genero
+WHERE autor.CodA=autoria.CodA and autoria.ISBN=genero.ISBN and genero.GeneroN = 'drama';
+
+
+--b)
+SELECT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome = 'Agatha Christie';
+
+
+--c)
+SELECT DISTINCT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and membros.Pais=autor.Pais;
+
+
+--d)
+SELECT membros.Nome
+FROM membros 
+EXCEPT 
+SELECT DISTINCT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome = 'Agatha Christie';
+
+--e)
+INSERT INTO membros VALUES('Oleitor', 'oleitor', 'Portugal', 'Évora', '1996-11-20');
+INSERT INTO amigos VALUES('oleitor', 'm01');
+INSERT INTO amigos VALUES('oleitor', 'm04');
+
+SELECT membros.IdMemb
+FROM membros
+WHERE membros.IdMemb!='oleitor'
+EXCEPT
+SELECT DISTINCT membros.IdMemb
+FROM membros, amigos
+WHERE membros.IdMemb=amigos.IdMemb2 and amigos.IdMemb1='oleitor';
+
+--f)
+SELECT B.Nome
+FROM membros AS A, membros AS B, amigos
+WHERE A.IdMemb='oleitor' and A.IdMemb=amigos.IdMemb1 and amigos.IdMemb2=B.IdMemb and B.DataNasc>A.DataNasc;
+
+--g)
+SELECT DISTINCT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome='Agatha Christie' 
+INTERSECT
+SELECT DISTINCT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome='Francisco José Viegas';
+
+--h)
+SELECT DISTINCT membros.Nome
+FROM membros, gosta, autoria, autor
+WHERE membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome='Agatha Christie' 
+or membros.IdMemb=gosta.IdMemb and gosta.ISBN=autoria.ISBN and autoria.CodA=autor.CodA and autor.Nome='Francisco José Viegas';
+
+
+--i)
+SELECT count(amigos)
+FROM membros, amigos
+WHERE membros.IdMemb='oleitor' and amigos.IdMemb1=membros.IdMemb;
+
+
+--j)
+SELECT nome 
+FROM membros 
+WHERE IdMemb = (select f.memb from 
+    (
+    SELECT memb, sum(b.c) as contagem 
+        FROM (
+            SELECT IdMemb2 as memb, count(IdMemb2) as c 
+            FROM amigos group by idMemb2 
+            UNION 
+            SELECT IdMemb1 as memb, count(IdMemb1) as c 
+            FROM amigos 
+            GROUP BY idMemb1
+            ) AS b 
+            GROUP BY memb
+        ) AS f 
+        ORDER BY f.contagem desc
+        limit 1);
+
+
+--k)
+SELECT nome
+FROM
+  (SELECT idmemb2 AS membro
+   FROM amigos
+   WHERE idmemb1 in
+       (SELECT idmemb
+        FROM
+          (SELECT idmemb, count(idmemb) AS contagem
+           FROM gosta
+           GROUP BY idmemb
+           ORDER BY contagem DESC
+           LIMIT 1) AS t1)
+   UNION SELECT idmemb1
+   FROM amigos
+   WHERE idmemb2 in
+       (SELECT idmemb AS membro
+        FROM
+          (SELECT idmemb, count(idmemb) AS contagem
+           FROM gosta
+           GROUP BY idmemb
+           ORDER BY contagem DESC
+           LIMIT 1) AS t2)) AS t3
+INNER JOIN membros AS m ON t3.membro=m.idmemb;
+
+
+--l)
+SELECT l.titulo, t.generos
+FROM
+  (SELECT b.isbn, b.generos
+   FROM
+     (SELECT isbn, count(isbn) AS gostos
+      FROM gosta
+      GROUP BY isbn) AS a
+   INNER JOIN
+     (SELECT isbn, count(isbn) AS generos
+      FROM genero
+      GROUP BY isbn) AS b ON a.isbn = b.isbn) AS t
+INNER JOIN livro AS l ON t.isbn = l.isbn;
+
+--m)
+SELECT * FROM (
+	(SELECT livro.Titulo, count(genero.ISBN) AS generos 
+		FROM genero NATURAL INNER JOIN livro 
+		GROUP BY livro.Titulo) AS a
+	NATURAL INNER JOIN
+	(SELECT livro.Titulo, count(gosta.ISBN) AS gostos 
+		FROM gosta NATURAL INNER JOIN livro 
+		GROUP BY livro.Titulo) AS b
+);
+
+--n)
+SELECT * FROM (
+	(SELECT autor.Nome, count(livro.ISBN) AS livros 
+		FROM livro NATURAL INNER JOIN autoria NATURAL INNER JOIN autor 
+		GROUP BY autor.Nome) AS a
+	NATURAL INNER JOIN
+	(SELECT autor.Nome, count(genero.ISBN) AS generos 
+		FROM genero NATURAL INNER JOIN autoria NATURAL INNER JOIN autor 
+		GROUP BY autor.Nome) AS b
+	NATURAL INNER JOIN
+	(SELECT autor.Nome, count(gosta.ISBN) AS gostos 
+		FROM gosta NATURAL INNER JOIN autoria NATURAL INNER JOIN autor 
+		GROUP BY autor.Nome) AS c
+);
+
+--o)
+SELECT * 
+FROM (
+	(SELECT membros.Nome, count(amigos) AS namigos
+		FROM membros NATURAL INNER JOIN amigos
+        WHERE membros.IdMemb=amigos.IdMemb1 or membros.IdMemb=amigos.IdMemb2
+		GROUP BY membros.Nome) AS a
+	NATURAL INNER JOIN
+	(SELECT membros.Nome, count(livro.ISBN) AS nlivros
+		FROM membros NATURAL INNER JOIN gosta NATURAL INNER JOIN livro
+		GROUP BY membros.Nome) AS b
+);
+
+--p)
+SELECT nome
+FROM membros
+WHERE idmemb in
+    (SELECT total.memb
+     FROM
+     (SELECT f.memb, contagem
+     	FROM
+     	(SELECT memb, sum(b.c) AS contagem
+     		FROM
+     		(SELECT IdMemb2 AS memb, count(IdMemb2) AS c
+     			FROM amigos
+     			GROUP BY idMemb2
+     			UNION SELECT IdMemb1 AS memb, count(IdMemb1) AS c
+     			FROM amigos
+     			GROUP BY idMemb1) AS b
+     		GROUP BY memb) AS f
+     	ORDER BY f.contagem DESC) AS total
+     WHERE total.contagem =(SELECT count(*)-1 AS soma 
+     	FROM membros));
+
+
+--q)
+SELECT livro.Titulo
+FROM livro, amigos, gosta
+WHERE amigos.IdMemb1='oleitor' and amigos.IdMemb2=gosta.IdMemb and gosta.ISBN=livro.ISBN;
+
+πlivro.Titulo(σamigos.IdMemb1='oleitor'∧amigos.IdMemb2=gosta.IdMemb∧gosta.ISBN=livro.ISBN(livro⨝amigos⨝gosta))

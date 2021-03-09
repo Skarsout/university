@@ -1,0 +1,99 @@
+#5.
+#a)
+SELECT receitas.Nome
+FROM receitas, ingredientes
+WHERE ingredientes.IdReceita=receitas.IdReceita and ingredientes.NomeI='Pato'
+
+#b)
+SELECT receitas.Nome
+FROM receitas, ingredientes
+EXCEPT
+SELECT receitas.Nome
+FROM receitas, ingredientes
+WHERE ingredientes.IdReceita=receitas.IdReceita and ingredientes.NomeI='Pato'
+
+#c)
+SELECT DISTINCT membros.Nome
+FROM membros, receitas, ingredientes
+WHERE ingredientes.IdReceita=receitas.IdReceita and receitas.Username=membros.Username and ingredientes.NomeI='Pato'
+
+#d)
+SELECT DISTINCT membros.Nome
+FROM membros, amigos, receitas, ingredientes
+WHERE membros.Username=amigos.UsernameA and ingredientes.IdReceita=receitas.IdReceita and receitas.Username=amigos.UsernameB and ingredientes.NomeI='Pato' 
+	or membros.Username=amigos.UsernameB and ingredientes.IdReceita=receitas.IdReceita and receitas.Username=amigos.UsernameA and ingredientes.NomeI='Pato'
+
+#e)
+SELECT membros.Nome
+FROM membros, gostos, receitas, ingredientes
+WHERE membros.Username=gostos.Username and ingredientes.IdReceita=receitas.IdReceita and ingredientes.NomeI='Pato' and gostos.IdReceita=receitas.IdReceita and gostos.Estrelas>1
+
+#f)
+SELECT DISTINCT membros.Nome
+FROM membros, receitas, ingredientes
+WHERE membros.Username=receitas.Username and receitas.IdReceita=ingredientes.IdReceita and ingredientes.NomeI='Ovos' 
+	or membros.Username=receitas.Username and receitas.IdReceita=ingredientes.IdReceita and ingredientes.NomeI='Amendoas'
+
+#g)
+SELECT DISTINCT membros.Nome
+FROM membros, receitas, ingredientes
+WHERE ingredientes.IdReceita=receitas.IdReceita and receitas.Username=membros.Username and ingredientes.NomeI='Pato' 
+	or ingredientes.IdReceita=receitas.IdReceita and receitas.Username=membros.Username and ingredientes.NomeI='Peru'
+
+#h)
+SELECT DISTINCT IdReceita , max(num) as NumFotos
+FROM (SELECT DISTINCT tipoS.IdReceita, count(url.IdReceita) as num
+	FROM tipoS, url
+	WHERE url.IdReceita=tipoS.IdReceita GROUP BY tipoS.IdReceita) as x
+WHERE num = (SELECT max(num) as t
+	FROM (SELECT DISTINCT tipoS.IdReceita, count(url.IdReceita) as num
+		FROM tipoS, url
+		WHERE url.IdReceita=tipoS.IdReceita GROUP BY tipoS.IdReceita) as y) GROUP BY x.IdReceita
+
+
+
+
+#i)
+SELECT DISTINCT membros.Nome
+FROM membros, gostos, ingredientes, tipoE
+WHERE membros.Username=gostos.Username and gostos.Estrelas=3 and gostos.IdReceita=ingredientes.IdReceita and ingredientes.NomeI='Cogumelos' and tipoE.IdReceita=gostos.IdReceita
+
+#j)
+SELECT DISTINCT Nome , max(num) as MaisGostado3
+FROM (SELECT DISTINCT membros.Nome, count(gostos.Estrelas) as num
+	FROM membros, gostos, amigos, receitas
+	WHERE membros.Username=amigos.UsernameA and amigos.UsernameB=gostos.Username and gostos.Estrelas=3 and gostos.IdReceita=receitas.IdReceita and membros.Username=receitas.Username 
+	or membros.Username=amigos.UsernameB and amigos.UsernameA=gostos.Username and gostos.Estrelas=3 and gostos.IdReceita=receitas.IdReceita and membros.Username=receitas.Username 
+	GROUP BY membros.Nome) as x
+WHERE num = (SELECT max(num) as t
+	FROM (SELECT DISTINCT membros.Nome, count(gostos.Estrelas) as num
+		FROM membros, gostos, amigos, receitas
+		WHERE membros.Username=amigos.UsernameA and amigos.UsernameB=gostos.Username and gostos.Estrelas=3 and gostos.IdReceita=receitas.IdReceita and membros.Username=receitas.Username 
+or membros.Username=amigos.UsernameB and amigos.UsernameA=gostos.Username and gostos.Estrelas=3 and gostos.IdReceita=receitas.IdReceita and membros.Username=receitas.Username 
+		GROUP BY membros.Nome) as y) GROUP BY x.Nome
+
+#k)
+SELECT DISTINCT receitas.Nome, num as Gostos, tipoS.Custo
+FROM(SELECT DISTINCT Nome, count(gostos.Estrelas) as num
+        FROM ingredientes, receitas, gostos, tipoS
+        WHERE tipoS.facilidade='facil' and tipoS.IdReceita=receitas.IdReceita and receitas.IdReceita=ingredientes.IdReceita and ingredientes.NomeI='Chocolate' and gostos.Estrelas=3 and gostos.IdReceita=receitas.IdReceita
+        GROUP BY receitas.IdReceita, tipoS.Custo) as x NATURAL INNER JOIN receitas NATURAL INNER JOIN tipoS
+
+#l)
+SELECT DISTINCT count(num) as conta
+FROM(SELECT DISTINCT receitas.IdReceita, count(gostos.Estrelas) as num
+        FROM receitas, gostos, tipoS
+        WHERE tipoS.IdReceita=receitas.IdReceita and gostos.Estrelas>=2 and gostos.IdReceita=receitas.IdReceita and receitas.Nome like 'Mousse de chocolate'
+        GROUP BY receitas.IdReceita, tipoS.Custo
+        HAVING count(gostos.Estrelas)>5) as x
+
+
+#m)
+SELECT DISTINCT receitas.IdReceita
+FROM membros, amigos, gostos, receitas
+WHERE membros.Nome='Manuel Silva'and membros.Username=amigos.UsernameA and amigos.UsernameB=gostos.Username and gostos.IdReceita=receitas.IdReceita
+or membros.Nome='Manuel Silva'and membros.Username=amigos.UsernameB and amigos.UsernameA=gostos.Username and gostos.IdReceita=receitas.IdReceita
+EXCEPT
+(SELECT DISTINCT receitas.IdReceita
+	FROM receitas, gostos
+	WHERE gostos.Estrelas=1 and receitas.IdReceita=gostos.IdReceita)

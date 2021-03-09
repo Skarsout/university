@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criar produto</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header>
+    <a href="/index.html">
+        <img class="logo" src="/img/logo.svg" alt="logo">
+    </a>
+
+    <form method="get" action="/produtos/search">
+        <input class="search-bar" type="text" id="search" name="nome"/>
+        <input class="search-button" type="submit" value="Search">
+    </form>
+    <a href="/advanced-search.html" class="adv_search">Advanced search</a>
+
+    <form method="get" action="/carrinho">
+        <input type="hidden" value="ver carrinho"/>
+        <input class="img-checkout" type="image" src="/img/checkout.png">
+    </form>
+
+    <form th:action="@{/logout}" method="post">
+        <input class="logout" type="submit" value="Sign Out"/>
+    </form>
+</header>
+
+<div id="container">
+    <div id="categorias">
+        <h2>Categorias:</h2>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="singleplayer" name="categoria">
+            <input type="submit" value="Singleplayer">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="multiplayer" name="categoria">
+            <input type="submit" value="Multiplayer">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="acao" name="categoria">
+            <input type="submit" value="Ação">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="aventura" name="categoria">
+            <input type="submit" value="Aventura">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="rpg" name="categoria">
+            <input type="submit" value="RPG">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="estrategia" name="categoria">
+            <input type="submit" value="Estratégia">
+        </form>
+        <form method="get" action="/produtos/categoria">
+            <input type="hidden" value="simulador" name="categoria">
+            <input type="submit" value="Simulador">
+        </form>
+    </div>
+
+    <div class="content">
+        <h3>Remove produto</h3>
+        <form method='post' action='/admin/rem-produto/new'>
+            <label>Nome: </label>
+            <input type="text" id="nome" name="nome"/><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+<footer>
+    <a href="#">About this page</a>
+</footer>
+</body>
+</html>

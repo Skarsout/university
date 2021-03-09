@@ -1,0 +1,203 @@
+
+--2.
+
+CREATE TABLE membros(
+	Nome varchar(30),
+	IdMemb varchar(7),
+	Pais varchar(20),
+	Cidade varchar(30),
+	DataNasc date,
+	PRIMARY KEY(IdMemb)
+);
+
+CREATE TABLE livro(
+	ISBN char(9),
+	Titulo varchar(40),
+	PRIMARY KEY(ISBN)
+);
+
+CREATE TABLE autor(
+	CodA char(3) primary key,
+	Nome varchar(30),
+	Pais varchar(20)
+);
+
+CREATE TABLE amigos(
+	IdMemb1 varchar(7),
+	IdMemb2 varchar(7),
+	PRIMARY KEY(IdMemb1, IdMemb2),
+	foreign key (IdMemb1) references membros(IdMemb) on delete restrict,
+	foreign key (IdMemb2) references membros(IdMemb) on delete restrict
+);
+
+CREATE TABLE gosta(
+	IdMemb char(3),
+	ISBN char(9),
+	PRIMARY KEY(IdMemb, ISBN),
+	foreign key (IdMemb) references membros(IdMemb) on delete restrict,
+	foreign key (ISBN) references livro(ISBN) on delete restrict
+);
+
+
+CREATE TABLE genero(
+	ISBN char(9),
+	GeneroN varchar(10),
+	PRIMARY KEY(ISBN, GeneroN),
+	foreign key (ISBN) references livro(ISBN) on delete restrict
+);
+
+CREATE TABLE autoria(
+	ISBN char(9),
+	CodA char(3),
+	PRIMARY KEY(ISBN, CodA),
+	foreign key (ISBN) references livro(ISBN) on delete restrict,
+	foreign key (CodA) references autor(CodA) on delete restrict
+);
+
+--3.
+
+--a)
+INSERT INTO membros VALUES('Mufasa', 'm01', 'Angola', 'Luanda', '1980-01-31');
+INSERT INTO membros VALUES('Maria', 'm02', 'Portugal', 'Coimbra', '1996-02-28');
+INSERT INTO membros VALUES('Joana', 'm03', 'Portugal', 'Braga', '1981-03-27');
+INSERT INTO membros VALUES('Vladimir', 'm04', 'Rússia', 'Moscovo', '1999-04-26');
+INSERT INTO membros VALUES('Ana', 'm05', 'Portugal', 'Guimarães', '1987-05-25');
+INSERT INTO membros VALUES('Daniel', 'm06', 'Portugal', 'Setubal', '1991-06-24');
+INSERT INTO membros VALUES('Joaquina', 'm07', 'Portugal', 'Barreiro', '1980-07-23');
+INSERT INTO membros VALUES('Bernardo', 'm08', 'Portugal', 'Canha', '1998-08-22');
+INSERT INTO membros VALUES('Nuno', 'm09', 'Portugal', 'Montijo', '1980-09-21');
+INSERT INTO membros VALUES('Borat', 'm10', 'Cazaquistão', 'Kuztsek', '1980-10-20');
+INSERT INTO membros VALUES('Ranjeet', 'm11', 'India', 'Delhi', '1980-11-19');
+INSERT INTO membros VALUES('Henrique', 'm12', 'Portugal', 'Évora', '1993-12-18');
+INSERT INTO membros VALUES('Afonso', 'm13', 'Portugal', 'Beja', '1979-01-17');
+INSERT INTO membros VALUES('Duarte', 'm14', 'Portugal', 'Faro', '1999-02-16');
+INSERT INTO membros VALUES('Manuel', 'm15', 'Portugal', 'Trás-os-Montes', '2000-03-15');
+INSERT INTO membros VALUES('Naruto', 'm16', 'Japão', 'Hiroshima', '1995-04-14');
+INSERT INTO membros VALUES('Esteban', 'm17', 'Espanha', 'Madrid','1940-05-13');
+INSERT INTO membros VALUES('Catarina', 'm18', 'Portugal', 'Sintra','1981-06-12');
+INSERT INTO membros VALUES('Mariana', 'm19', 'Portugal', 'Guarda','1982-07-11');
+INSERT INTO membros VALUES('Chen', 'm20', 'China', 'Beijing','1995-08-10');
+
+--b)
+
+INSERT INTO livro VALUES('l01', 'Stalker');
+INSERT INTO livro VALUES('l02','Rota 66');
+INSERT INTO livro VALUES('l03','Private');
+INSERT INTO livro VALUES('l04','O Hipnoista');
+INSERT INTO livro VALUES('l05','Tropa de Elite');
+INSERT INTO livro VALUES('l06','Sem Saida');
+INSERT INTO livro VALUES('l07','O caçador');
+INSERT INTO livro VALUES('l08','A queda');
+INSERT INTO livro VALUES('l09','The girl on the train');
+INSERT INTO livro VALUES('l10','Escudo vermelho');
+
+
+INSERT INTO autor VALUES('a01', 'Agatha Christie', 'Inglaterra');
+INSERT INTO autor VALUES('a02', 'Francisco José Viegas', 'Portugal');
+INSERT INTO autor VALUES('a03', 'Maria Joaquina', 'Portugal');
+INSERT INTO autor VALUES('a04', 'James Ellroy','U.S.A');
+INSERT INTO autor VALUES('a05', 'Patrícia Melo','Brasil');
+
+
+INSERT INTO	autoria VALUES('l08','a04');
+INSERT INTO	autoria VALUES('l08','a03');
+INSERT INTO	autoria VALUES('l08','a05');
+
+INSERT INTO	autoria VALUES('l01','a01');
+INSERT INTO	autoria VALUES('l01','a02');
+
+INSERT INTO autoria VALUES('l02', 'a01');
+INSERT INTO autoria VALUES('l03', 'a02');
+INSERT INTO autoria VALUES('l04', 'a03');
+INSERT INTO autoria VALUES('l05', 'a04');
+INSERT INTO autoria VALUES('l06', 'a05');
+INSERT INTO autoria VALUES('l07', 'a01');
+INSERT INTO autoria VALUES('l09', 'a02');
+INSERT INTO autoria VALUES('l10', 'a03');
+
+INSERT INTO genero VALUES('l01','drama');
+INSERT INTO genero VALUES('l01', 'policial');
+INSERT INTO genero VALUES('l02','comedia');
+INSERT INTO genero VALUES('l02', 'policial');
+INSERT INTO genero VALUES('l03','terror');
+INSERT INTO genero VALUES('l03', 'policial');
+INSERT INTO genero VALUES('l04','familiar'); 
+INSERT INTO genero VALUES('l04', 'policial');
+INSERT INTO genero VALUES('l05','comedia'); 
+INSERT INTO genero VALUES('l05', 'policial');
+INSERT INTO genero VALUES('l06','romance'); 
+INSERT INTO genero VALUES('l06', 'policial');
+INSERT INTO genero VALUES('l07','drama');
+INSERT INTO genero VALUES('l07', 'policial');
+INSERT INTO genero VALUES('l08','romance');
+INSERT INTO genero VALUES('l08', 'policial');
+INSERT INTO genero VALUES('l09','terror');
+INSERT INTO genero VALUES('l09', 'policial');
+INSERT INTO genero VALUES('l10','drama');
+INSERT INTO genero VALUES('l10', 'policial');
+
+--c)
+
+INSERT INTO amigos VALUES('m01', 'm02');
+INSERT INTO amigos VALUES('m01', 'm03');
+INSERT INTO amigos VALUES('m01', 'm04');
+INSERT INTO amigos VALUES('m01', 'm05');
+INSERT INTO amigos VALUES('m01', 'm06');
+INSERT INTO amigos VALUES('m01', 'm07');
+INSERT INTO amigos VALUES('m01', 'm08');
+INSERT INTO amigos VALUES('m01', 'm09');
+INSERT INTO amigos VALUES('m01', 'm10');
+INSERT INTO amigos VALUES('m01', 'm11');
+INSERT INTO amigos VALUES('m01', 'm12');
+INSERT INTO amigos VALUES('m01', 'm13');
+INSERT INTO amigos VALUES('m01', 'm14');
+INSERT INTO amigos VALUES('m01', 'm15');
+INSERT INTO amigos VALUES('m01', 'm16');
+INSERT INTO amigos VALUES('m01', 'm17');
+INSERT INTO amigos VALUES('m01', 'm18');
+INSERT INTO amigos VALUES('m01', 'm19');
+INSERT INTO amigos VALUES('m01', 'm20');
+INSERT INTO amigos VALUES('m02', 'm03');
+INSERT INTO amigos VALUES('m02', 'm04');
+INSERT INTO amigos VALUES('m02', 'm05');
+INSERT INTO amigos VALUES('m06', 'm07');
+INSERT INTO amigos VALUES('m06', 'm08');
+INSERT INTO amigos VALUES('m06', 'm09');
+INSERT INTO amigos VALUES('m10', 'm11');
+INSERT INTO amigos VALUES('m10', 'm12');
+INSERT INTO amigos VALUES('m10', 'm13');
+INSERT INTO amigos VALUES('m14', 'm15');
+INSERT INTO amigos VALUES('m14', 'm16');
+INSERT INTO amigos VALUES('m14', 'm17');
+INSERT INTO amigos VALUES('m17', 'm18');
+INSERT INTO amigos VALUES('m17', 'm19');
+INSERT INTO amigos VALUES('m17', 'm20');
+
+--d)
+
+INSERT INTO gosta VALUES('m01', 'l01');
+INSERT INTO gosta VALUES('m02', 'l02');
+INSERT INTO gosta VALUES('m03', 'l03');
+INSERT INTO gosta VALUES('m04', 'l04');
+INSERT INTO gosta VALUES('m05', 'l05');
+INSERT INTO gosta VALUES('m06', 'l06');
+INSERT INTO gosta VALUES('m07', 'l07');
+INSERT INTO gosta VALUES('m08', 'l08');
+INSERT INTO gosta VALUES('m09', 'l09');
+INSERT INTO gosta VALUES('m10', 'l10');
+INSERT INTO gosta VALUES('m10', 'l08');
+INSERT INTO gosta VALUES('m10', 'l04');
+INSERT INTO gosta VALUES('m11', 'l01');
+INSERT INTO gosta VALUES('m12', 'l02');
+INSERT INTO gosta VALUES('m13', 'l03');
+INSERT INTO gosta VALUES('m14', 'l04');
+INSERT INTO gosta VALUES('m15', 'l05');
+INSERT INTO gosta VALUES('m16', 'l06');
+INSERT INTO gosta VALUES('m17', 'l07');
+INSERT INTO gosta VALUES('m18', 'l08');
+INSERT INTO gosta VALUES('m19', 'l09');
+INSERT INTO gosta VALUES('m20', 'l10');
+
+INSERT INTO membros VALUES('Oleitor', 'oleitor', 'Portugal', 'Évora', '1996-11-20');
+INSERT INTO amigos VALUES('oleitor', 'm01');
+INSERT INTO amigos VALUES('oleitor', 'm04');

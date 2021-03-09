@@ -1,0 +1,344 @@
+CREATE TABLE membros(
+	Nome varchar(100),
+	Username char (3),
+	Pais varchar(20),
+	Cidade varchar(20),
+	DataNasc date,
+	PRIMARY KEY(Username)
+);
+
+CREATE TABLE amigos(
+	UsernameA char(3),
+	UsernameB char(3),
+	PRIMARY KEY(UsernameA, UsernameB),
+	foreign key(UsernameA) references membros(Username) on delete restrict,
+	foreign key(UsernameB) references membros(Username) on delete restrict
+);
+
+CREATE TABLE receitas(
+	Nome varchar(100),
+	IdReceita char(3),
+	Username varchar(3),
+	Descricao varchar(500),
+	PRIMARY KEY(IdReceita),
+	foreign key(Username) references membros(Username) on delete restrict
+);
+
+CREATE TABLE gostos(
+	Username char(3),
+	IdReceita char(3),
+	Estrelas integer,
+	PRIMARY KEY (Username,IdReceita),
+	foreign key(Username) references membros(Username) on delete restrict,
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+CREATE TABLE tipoS(
+	IdReceita char(3),
+	facilidade varchar(20),
+	tempo integer,
+	custo varchar(3),
+	PRIMARY KEY (IdReceita),
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+CREATE TABLE tipoE(
+	IdReceita char(3),
+	tempo integer,
+	custo varchar(3),
+	PRIMARY KEY (IdReceita),
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+CREATE TABLE tipoP(
+	IdReceita char(3),
+	Nporcoes integer,
+	tempo integer,
+	custo varchar(3),
+	PRIMARY KEY (IdReceita),
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+CREATE TABLE url(
+	IdReceita char(3),
+	Link varchar(100),
+	PRIMARY KEY (IdReceita, Link),
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+CREATE TABLE ingredientes(
+	NomeI varchar(30),
+	IdReceita char(3),
+	Quant integer,
+	Unidade varchar(20),
+	PRIMARY KEY(NomeI,IdReceita),
+	foreign key(IdReceita) references receitas(IdReceita) on delete restrict
+);
+
+
+INSERT INTO membros VALUES('Ana Fidalgo', 'm01', 'Portugal', 'Lisboa', '1980-01-31');
+INSERT INTO membros VALUES('Maria Reis', 'm02', 'Portugal', 'Coimbra', '1996-02-28');
+INSERT INTO membros VALUES('Joana Branco', 'm03', 'Portugal', 'Braga', '1981-03-27');
+INSERT INTO membros VALUES('Vladimir Yure', 'm04', 'Rússia', 'Moscovo', '1999-04-26');
+INSERT INTO membros VALUES('Eduardo Ferreira', 'm05', 'Portugal', 'Guimarães', '1987-05-25');
+INSERT INTO membros VALUES('Daniel Caneira', 'm06', 'Portugal', 'Setubal', '1991-06-24');
+INSERT INTO membros VALUES('Joaquina Santos', 'm07', 'Portugal', 'Barreiro', '1980-07-23');
+INSERT INTO membros VALUES('Bernardo Freitas', 'm08', 'Portugal', 'Canha', '1998-08-22');
+INSERT INTO membros VALUES('Nuno Miguel', 'm09', 'Portugal', 'Montijo', '1980-09-21');
+INSERT INTO membros VALUES('Irina Amarante', 'm10', 'Portugal', 'Porto', '1980-10-20');
+INSERT INTO membros VALUES('Manuel Silva','m11','Portugal', 'Santarem', '1983-07-24');
+
+
+INSERT INTO amigos VALUES('m01','m02');
+INSERT INTO amigos VALUES('m01','m11');
+INSERT INTO amigos VALUES('m02','m04');
+INSERT INTO amigos VALUES('m02','m05');
+INSERT INTO amigos VALUES('m03','m06');
+INSERT INTO amigos VALUES('m03','m11');
+INSERT INTO amigos VALUES('m04','m08');
+INSERT INTO amigos VALUES('m04','m09');
+INSERT INTO amigos VALUES('m05','m01');
+INSERT INTO amigos VALUES('m05','m03');
+INSERT INTO amigos VALUES('m06','m02');
+INSERT INTO amigos VALUES('m06','m04');
+INSERT INTO amigos VALUES('m07','m03');
+INSERT INTO amigos VALUES('m07','m11');
+INSERT INTO amigos VALUES('m08','m04');
+INSERT INTO amigos VALUES('m08','m06');
+INSERT INTO amigos VALUES('m09','m05');
+INSERT INTO amigos VALUES('m09','m07');
+INSERT INTO amigos VALUES('m10','m06');
+INSERT INTO amigos VALUES('m10','m08');
+INSERT INTO amigos VALUES('m11','m07');
+INSERT INTO amigos VALUES('m11','m03');
+INSERT INTO amigos VALUES('m11','m01');
+INSERT INTO amigos VALUES('m11','m08');
+
+INSERT INTO receitas VALUES('Caldo de Legumes com noodles','r01','m01','Experimente este reconfortante caldo de legumes com noodles e pesto, uma receita que fica pronta em apenas 15 minutos. Sirva bem quente, e finalize com o delicioso');
+INSERT INTO ingredientes VALUES('Azeite','r01','1','colhar de sopa');
+INSERT INTO ingredientes VALUES('Sopa Juliana','r01','400','gramas');
+INSERT INTO ingredientes VALUES('Alho em pó','r01','1','colhar de chá');
+INSERT INTO ingredientes VALUES('Agua', 'r01','750', 'gramas');
+INSERT INTO tipoE VALUES('r01','15','$');
+INSERT INTO url VALUES('r01','https://pics.photos/1');
+
+INSERT INTO receitas VALUES('Coscoroes','r02','m01','Tipicamente confeccionados na época natalícia, os coscorões são uma sobremesa muito apreciada à mesa dos portugueses. Doces e estaladiços, e com um leve paladar a canela. Uma verdadeira delícia!');
+INSERT INTO ingredientes VALUES('Banha de porco', 'r02', '2','colher de sopa');
+INSERT INTO ingredientes VALUES('agua', 'r02', '50','ml');
+INSERT INTO ingredientes VALUES('farinha de trigo', 'r02', '500','gramas');
+INSERT INTO ingredientes VALUES('oleo', 'r02', '50','ml');
+INSERT INTO ingredientes VALUES('açucar', 'r02', '75','gramas');
+INSERT INTO tipoS VALUES('r02','facil','30','$');
+INSERT INTO url VALUES('r02','https://pics.photos/2');
+INSERT INTO url VALUES('r02','https://pics.photos/3');
+INSERT INTO url VALUES('r02','https://pics.photos/4');
+INSERT INTO url VALUES('r02','https://pics.photos/5');
+INSERT INTO url VALUES('r02','https://pics.photos/6');
+INSERT INTO url VALUES('r02','https://pics.photos/7');
+
+INSERT INTO receitas VALUES('Peru recheado com batatas e castanhas','r03','m02','Presença habitual na época natalícia, o peru recheado é ideal para refeições em família, em qualquer altura do ano. Esta receita junta ao peru diferentes sabores como a castanha, amêndoa e sultanas, resultando num prato rico em texturas e aromas');
+INSERT INTO ingredientes VALUES('Peru', 'r03', '7','kg');
+INSERT INTO ingredientes VALUES('Sal', 'r03', '20','gramas');
+INSERT INTO ingredientes VALUES('Bacon', 'r03', '200','gramas');
+INSERT INTO ingredientes VALUES('Azeite', 'r03', '100','ml');
+INSERT INTO tipoP VALUES('r03','4','240','$$$');
+INSERT INTO url VALUES('r03','https://pics.photos/8');
+INSERT INTO url VALUES('r03','https://pics.photos/9');
+INSERT INTO url VALUES('r03','https://pics.photos/10');
+INSERT INTO url VALUES('r03','https://pics.photos/11');
+
+INSERT INTO receitas VALUES('Pato Rechado','r04','m02','Um assado é uma receita lenta que requer bons temperos e claro, o recheio para enriquecer o prato. Os sabores vão cozinhando e agregando todo o sabor num molho delicioso e suculento');
+INSERT INTO ingredientes VALUES('Pato', 'r04', '2500','g');
+INSERT INTO ingredientes VALUES('Sal', 'r04', '1','colher de sopa');
+INSERT INTO ingredientes VALUES('Azeite', 'r04', '2','colher de sopa');
+INSERT INTO tipoP VALUES('r04','4','120','$$$');
+INSERT INTO url VALUES('r04','https://pics.photos/12');
+INSERT INTO url VALUES('r04','https://pics.photos/13');
+
+INSERT INTO receitas VALUES('Pato com arandos e maçã frita','r05','m03','Esta é uma receita típica do centro da Europa, mas especificamente da Polónia. Rico e colorido, este prato promete fazer as delícias de todos em casa!');
+INSERT INTO ingredientes VALUES('Pato', 'r05', '200','gramas');
+INSERT INTO ingredientes VALUES('Sal', 'r05', '1','colher de cha');
+INSERT INTO ingredientes VALUES('maça', 'r05', '3','unidades');
+INSERT INTO ingredientes VALUES('Açucar', 'r05', '1','colher de sopa');
+INSERT INTO tipoP VALUES('r05','1','35','$$');
+INSERT INTO url VALUES('r05','https://pics.photos/14');
+INSERT INTO url VALUES('r05','https://pics.photos/15');
+
+INSERT INTO receitas VALUES('Omelete com cogumelos e tomate','r06','m03','Uma receita de omelete com cogumelos e tomate, servida com massa e salada. Saborosa e com ingredientes que todos as crianças gostam. Quem quer repetir?');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r06', '200','gramas');
+INSERT INTO ingredientes VALUES('Massa', 'r06', '200','gramas');
+INSERT INTO ingredientes VALUES('Ovos', 'r06', '4','unidades');
+INSERT INTO ingredientes VALUES('Sal', 'r06', '2','colher de cafe');
+INSERT INTO tipoP VALUES('r06','1','20','$');
+INSERT INTO url VALUES('r06','https://pics.photos/16');
+INSERT INTO url VALUES('r06','https://pics.photos/17');
+
+INSERT INTO receitas VALUES('Molho cremoso de cogumelos com caril','r07','m04','Este molho de cogumelos com caril, muito aromático e consistente, é ideal para servir com massas, aves, carnes assadas ou grelhadas');
+INSERT INTO ingredientes VALUES('Azeite', 'r07', '2','colher de sopa');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r07', '250','gramas');
+INSERT INTO ingredientes VALUES('caril', 'r07', '1','colher de sopa');
+INSERT INTO tipoE VALUES('r07','20','$');
+INSERT INTO url VALUES('r07','https://pics.photos/18');
+
+INSERT INTO receitas VALUES('Crepe Suzette','r08','m04','O famoso crepe Suzette é uma receita tradicional da cozinha francesa. A calda de laranja e rum confere-lhe um sabor único, e difícil de resistir. A sobremesa ideal para finalizar qualquer refeição.');
+INSERT INTO ingredientes VALUES('Ovos', 'r08', '3','gemas');
+INSERT INTO ingredientes VALUES('farinha', 'r08', '120','gramas');
+INSERT INTO ingredientes VALUES('manteiga', 'r08', '240','gramas');
+INSERT INTO tipoS VALUES('r08','dificil','150','$');
+INSERT INTO url VALUES('r08','https://pics.photos/19');
+
+INSERT INTO receitas VALUES('Rabanadas com gelado de morango','r09','m05','Há quem lhes chame rabanadas, outros fatias douradas, mas uma coisa é certa: são um dos doces mais tradicionais do Natal e cada família tem a sua receita.');
+INSERT INTO ingredientes VALUES('leite', 'r09', '400','ml');
+INSERT INTO ingredientes VALUES('Ovos', 'r09', '2','unidades');
+INSERT INTO ingredientes VALUES('Gelado', 'r09', '1','bola');
+INSERT INTO ingredientes VALUES('Pao', 'r09', '2','fatias');
+INSERT INTO tipoS VALUES('r09','medio','30','$');
+INSERT INTO url VALUES('r09','https://pics.photos/20');
+INSERT INTO url VALUES('r09','https://pics.photos/21');
+
+INSERT INTO receitas VALUES('Bolachas recheadas','r10','m05','Junte a família na cozinha e preparem estas divertidas bolachas recheadas. Decore a gosto com o glacé e partilhem este momento especial.');
+INSERT INTO ingredientes VALUES('Manteiga', 'r10', '70','grama');
+INSERT INTO ingredientes VALUES('Ovos', 'r10', '1','gema');
+INSERT INTO ingredientes VALUES('açucar', 'r10', '50','gramas');
+INSERT INTO ingredientes VALUES('Chocolate', 'r10', '100','gramas');
+INSERT INTO tipoS VALUES('r10','facil','60','$');
+INSERT INTO url VALUES('r10','https://pics.photos/22');
+
+INSERT INTO receitas VALUES('Brigadeiros de quindim','r11','m06','Os brigadeiros de quindim surgem da junção de duas receitas bem conhecidas e apreciadas um pouco por toda a parte: o brigadeiro e o quindim. Simples de confecionar, mas difíceis de resistir!');
+INSERT INTO ingredientes VALUES('Ovos', 'r11', '12','gemas');
+INSERT INTO ingredientes VALUES('Leite', 'r11', '2','colher de sopa');
+INSERT INTO ingredientes VALUES('Amendoas','r11', '10','gramas');
+INSERT INTO tipoS VALUES('r11','facil','45','$$');
+INSERT INTO url VALUES('r11','https://pics.photos/23');
+
+INSERT INTO receitas VALUES('Camarões panados','r12','m06','Prepare estes camarões panados com espuma de alho negro e surpreenda os seus convidados. Com uma textura suave e um travo único, é a receita perfeita para impressionar em momentos de convívio. ');
+INSERT INTO ingredientes VALUES('camarao', 'r12', '600','gramas');
+INSERT INTO ingredientes VALUES('Sal', 'r12', '1','colher de sobremesa');
+INSERT INTO ingredientes VALUES('Pao', 'r12', '300','gramas');
+INSERT INTO tipoE VALUES('r12','20','$$');
+INSERT INTO url VALUES('r12','https://pics.photos/24');
+
+INSERT INTO receitas VALUES('Tacos primavera','r13','m07','Se não sabe como aproveitar as sobras de feijão guisado, ou até de chili com carne, temos a sugestão ideal. Uns deliciosos tacos, com queijo cheddar, muito fáceis de preparar e que vão surpreender os seus convidados. Experimente!');
+INSERT INTO ingredientes VALUES('Tortilhas', 'r13', '2','unidades');
+INSERT INTO ingredientes VALUES('Queijo', 'r13', '35','gramas');
+INSERT INTO ingredientes VALUES('Tomate', 'r13', '1','unidade');
+INSERT INTO tipoE VALUES('r13','20','$');
+INSERT INTO url VALUES('r13','https://pics.photos/25');
+
+INSERT INTO receitas VALUES('Croquetes de arroz de pato','r14','m07','O arroz de pato é uma receita tradicional da gastronomia portuguesa. Muito simples, rápido e económico, é um prato em que a tendência é fazer quantidades consideráveis. Quando tiver sobras faça estes saborosos croquetes.');
+INSERT INTO ingredientes VALUES('Pato', 'r14', '200','gramas');
+INSERT INTO ingredientes VALUES('Arroz', 'r14', '200','gramas');
+INSERT INTO ingredientes VALUES('Ovos', 'r14', '1','unidade');
+INSERT INTO tipoE VALUES('r14','40','$$');
+INSERT INTO url VALUES('r14','https://pics.photos/26');
+
+INSERT INTO receitas VALUES('Magret de pato','r15','m08','O pato é reinventado nesta receita de magret de pato com cereja e feijão-verde. Um prato sofisticado e uma boa receita para fazer quando receber convidados em casa.');
+INSERT INTO ingredientes VALUES('Pato', 'r15', '250','gramas');
+INSERT INTO ingredientes VALUES('chalotas', 'r15', '80','gramas');
+INSERT INTO ingredientes VALUES('sal', 'r15', '2','colher de chá');
+INSERT INTO tipoP VALUES('r15','2','35','$$$');
+INSERT INTO url VALUES('r15','https://pics.photos/27');
+
+INSERT INTO receitas VALUES('Arroz de pato','r16','m08','Um arroz de pato é sempre uma boa ideia para uma festa ou para um encontro com amigos. Aprenda a fazê-lo com quem sabe. Sai sempre bem');
+INSERT INTO ingredientes VALUES('Pato', 'r16', '250','gramas');
+INSERT INTO ingredientes VALUES('Arroz', 'r16', '400','gramas');
+INSERT INTO ingredientes VALUES('Chouriço', 'r16', '150','gramas');
+INSERT INTO tipoP VALUES('r16','4','60','$$');
+INSERT INTO url VALUES('r16','https://pics.photos/28');
+
+INSERT INTO receitas VALUES('Bola de frango','r17','m09','Associadas às festividades da Páscoa de norte a sul do país, as bolas têm na sua origem a necessidade de conservação de carnes e alguns peixes. Experimente esta bola simples numa conjugação deliciosa de sabores.');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r17', '200','gramas');
+INSERT INTO ingredientes VALUES('Frango', 'r17', '200','gramas');
+INSERT INTO ingredientes VALUES('Ovos', 'r17', '1','gema');
+INSERT INTO ingredientes VALUES('Amendoas','r17','50','gramas');
+INSERT INTO tipoP VALUES('r17','1','60','$');
+INSERT INTO url VALUES('r17','https://pics.photos/29');
+INSERT INTO url VALUES('r17','https://pics.photos/30');
+
+INSERT INTO receitas VALUES('Polvo braseado','r18','m09','A receita de polvo braseado com cogumelos e puré de batata-doce é de confecção simples, mas de aspecto e sabor divinais.');
+INSERT INTO ingredientes VALUES('Polvo', 'r18', '1','kilograma');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r18', '100','gramas');
+INSERT INTO ingredientes VALUES('Azeite', 'r18', '2','colher de sopa');
+INSERT INTO tipoP VALUES('r18','2','55','$$$');
+INSERT INTO url VALUES('r18','https://pics.photos/31');
+
+INSERT INTO receitas VALUES('Vitela assada','r19','m10','A carne de vitela é tenra, suculenta e saborosa. Esta receita de vitela assada com cogumelos, e aromatizada com alecrim, é ideal para apreciar em família.');
+INSERT INTO ingredientes VALUES('Vitela', 'r19', '1','kilograma');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r19', '350','gramas');
+INSERT INTO ingredientes VALUES('Batata', 'r19', '600','gramas');
+INSERT INTO tipoP VALUES('r19','1','90','$$');
+INSERT INTO url VALUES('r19','https://pics.photos/32');
+INSERT INTO url VALUES('r19','https://pics.photos/33');
+
+INSERT INTO receitas VALUES('Empadão de vitela','r20','m10','Com esta receita de empadão de vitela com puré de batata-doce, com ervilhas e cenoura, as crianças vão comer vegetais sem dar por isso. Uma opção saborosa e nutritiva, ideal para a família inteira.');
+INSERT INTO ingredientes VALUES('Vitela', 'r20', '200','gramas');
+INSERT INTO ingredientes VALUES('Batata', 'r20', '300','gramas');
+INSERT INTO ingredientes VALUES('Leite', 'r20', '50','ml');
+INSERT INTO tipoP VALUES('r20','6','60','$$');
+INSERT INTO url VALUES('r20','https://pics.photos/34');
+INSERT INTO url VALUES('r20','https://pics.photos/35');
+
+INSERT INTO receitas VALUES('Lombo Wellington','r21','m11','Impressione os seus convidados com este suculento Lombo Wellington. Acompanhe com esparregado de espinafres e com um copo de vinho tinto encorpado');
+INSERT INTO ingredientes VALUES('Lombo', 'r21', '800','gramas');
+INSERT INTO ingredientes VALUES('Cogumelos', 'r21', '300','gramas');
+INSERT INTO ingredientes VALUES('Azeite', 'r21', '1','colher de sopa');
+INSERT INTO tipoP VALUES('r21','8','90','$$$');
+INSERT INTO url VALUES('r21','https://pics.photos/36');
+INSERT INTO url VALUES('r21','https://pics.photos/37');
+
+INSERT INTO receitas VALUES('Peito de peru','r22', 'm01','Prepare-se para uma combinação inesperada! Este peito de peru estufado e depois servido com molho picante de chocolate, é uma fusão repleta de sabor. Complete com arroz agulha polvilhado com coentros.');
+INSERT INTO ingredientes VALUES('Peru', 'r22', '1','kilograma');
+INSERT INTO ingredientes VALUES('Açucar', 'r22', '1','colher de cha');
+INSERT INTO tipoP VALUES('r22','2','60','$$');
+INSERT INTO url VALUES('r22','https://pics.photos/38');
+INSERT INTO url VALUES('r22','https://pics.photos/39');
+
+INSERT INTO receitas VALUES('Mousse de chocolate', 'r23', 'm02','A mousse de chocolate branco com caril é uma atrevida mistura de sabores que combinam na perfeição, e não vão deixar ninguém indiferente. Vai ser a estrela da sua refeição. Rápida, fácil, e muito saborosa.');
+INSERT INTO ingredientes VALUES('Chocolate', 'r23', '300','gramas');
+INSERT INTO ingredientes VALUES('Nata','r23','200','mililitros');
+INSERT INTO tipoS VALUES('r23','facil','20','$');
+INSERT INTO url VALUES('r23','https://pics.photos/40');
+
+INSERT INTO receitas VALUES('Mousse de chocolate', 'r24', 'm03','Irresistível esta mousse de chocolate preparada com dois chocolates, chocolate 70% de cacau e chocolate branco. Colheradas doces para verdadeiros gulosos!');
+INSERT INTO ingredientes VALUES('Chocolate', 'r24', '200','gramas');
+INSERT INTO ingredientes VALUES('Manteiga','r24','150','gramas');
+INSERT INTO tipoS VALUES('r24','facil','20','$');
+INSERT INTO url VALUES('r24','https://pics.photos/41');
+
+
+
+
+INSERT INTO gostos VALUES('m01','r04','2');
+INSERT INTO gostos VALUES('m02','r04','3');
+INSERT INTO gostos VALUES('m02','r16','1');
+INSERT INTO gostos VALUES('m03','r14','2');
+
+INSERT INTO gostos VALUES('m04','r06','3');
+INSERT INTO gostos VALUES('m04','r07','3');
+INSERT INTO gostos VALUES('m04','r17','3');
+INSERT INTO gostos VALUES('m04','r18','3');
+INSERT INTO gostos VALUES('m04','r19','3');
+INSERT INTO gostos VALUES('m04','r20','3');
+INSERT INTO gostos VALUES('m06','r06','3');
+INSERT INTO gostos VALUES('m06','r07','3');
+INSERT INTO gostos VALUES('m06','r17','3');
+INSERT INTO gostos VALUES('m06','r18','3');
+INSERT INTO gostos VALUES('m06','r19','3');
+INSERT INTO gostos VALUES('m06','r20','3');
+
+INSERT INTO gostos VALUES('m02','r09','3');
+INSERT INTO gostos VALUES('m09','r10','3');
+INSERT INTO gostos VALUES('m09','r09','3');
+INSERT INTO gostos VALUES('m01','r09','3');
+INSERT INTO gostos VALUES('m03','r03','3');
+
+INSERT INTO gostos VALUES('m11','r10','3');
+INSERT INTO gostos VALUES('m10','r23','3');
+INSERT INTO gostos VALUES('m07','r23','3');
+INSERT INTO gostos VALUES('m05','r24','3');
+
+INSERT INTO gostos VALUES('m06','r23','3');
+INSERT INTO gostos VALUES('m03','r23','2');
+INSERT INTO gostos VALUES('m08','r23','2');
+INSERT INTO gostos VALUES('m11','r23','2');
+INSERT INTO gostos VALUES('m09','r23','3');
